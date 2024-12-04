@@ -1,7 +1,8 @@
 mod day1;
+mod day2;
 
 fn main() {
-    let (l1, l2) = day1::read_question1_input("./input1.txt");
-    let result = day1::solve_question1_2(l1, l2);
+    let inputs = day2::read_input("./input/day2.txt");
+    let result = day2::solve_problem2_1(inputs);
     println!("{}", result);
 }
