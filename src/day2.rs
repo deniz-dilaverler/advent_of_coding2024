@@ -56,3 +56,62 @@ pub fn solve_problem2_1(input: Vec<Vec<i32>>) -> i32 {
 
     return count;
 }
+
+fn solve_decreasing_index(line: &Vec<i32>) -> i32 {
+    for i in 0..line.len() - 1 {
+        let dif = line[i] - line[i + 1];
+
+        if dif > 3 || dif <= 0 {
+            return i as i32;
+        }
+    }
+    return -1;
+}
+
+fn solve_increasing_index(line: &Vec<i32>) -> i32 {
+    for i in 0..line.len() - 1 {
+        let dif = line[i + 1] - line[i];
+
+        if dif > 3 || dif <= 0 {
+            return i as i32;
+        }
+    }
+    return -1;
+}
+
+pub fn remove_and_try(line: &Vec<i32>, index: i32) -> bool {
+    if index >= line.len() as i32 || index < 0 {
+        return false;
+    }
+
+    let mut line_cp = line.clone();
+
+    line_cp.remove(index as usize);
+    let retry_res1 = solve_decreasing_index(&line_cp);
+    let retry_res2 = solve_increasing_index(&line_cp);
+    return retry_res1 == -1 || retry_res2 == -1;
+}
+
+pub fn solve_problem2_2(input: Vec<Vec<i32>>) -> i32 {
+    let mut count = 0;
+    for line in input {
+        let res1 = solve_decreasing_index(&line);
+        let res2 = solve_increasing_index(&line);
+
+        if res1 == -1 || res2 == -1 {
+            count += 1;
+            continue;
+        }
+
+        if remove_and_try(&line, res1)
+            || remove_and_try(&line, res1 + 1)
+            || remove_and_try(&line, res2)
+            || remove_and_try(&line, res2 + 1)
+        {
+            count += 1;
+            continue;
+        }
+    }
+
+    return count;
+}
